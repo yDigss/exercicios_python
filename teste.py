@@ -1,46 +1,47 @@
-def soma():
-    return num1 + num2
+class ContaBancaria:
+    def __init__(self, titular):
+        # Inicialize a conta bancária com o nome do titular, saldo 0 e uma lista para armazenar as operações realizadas
+        self.titular = titular
+        self.saldo = 0
+        self.operacoes = []  # Lista para armazenar as operações realizadas
 
-def subtrair():
-    resultado = num1 - num2
+    def depositar(self, valor):
+        # Realiza um depósito e registra a operação
+        self.saldo += valor
+        self.operacoes.append(f"+{valor}")  # Adiciona a operação ao extrato
 
-def multiplicar():
-    resultado = num1 * num2
+    def sacar(self, valor):
+        # Realiza um saque, se houver saldo suficiente
+        if valor > self.saldo:
+            print("Saque não permitido")  # Registra a operação de saque não permitido
+        else:
+            self.saldo -= valor
+            self.operacoes.append(f"{-valor}")  # Registra a operação negativa (saque)
 
-def dividir():
-    resultado = num1 / num2
+    def saldo_atual(self):
+        # Retorna o saldo atual
+        return self.saldo
 
-while True:
-    print ("Olá, bem vindo!")
+    def extrato(self):
+        # Exibe o extrato da conta com as operações realizadas e o saldo final
+        operacoes_str = ", ".join(self.operacoes)
+        print(f"Operações: {operacoes_str}; Saldo: {self.saldo}")
 
-    num1 = int(input("Digite o primeiro número: "))
-    num2 = int(input("Digite o segundo número: "))
 
-    print("1 - Soma")
-    print("2 - Subtrair")
-    print("3 - multiplicar")
-    print("4 - Dividir")
-    print("5 - sair")
+# Leitura do nome do titular
+nome_titular = input().strip()
+conta = ContaBancaria(nome_titular)
 
-    escolha = int(input("Escolha a opção de calculo: "))
+# Leitura das transações (valores de depósito e saque)
+entrada_transacoes = input().strip()
+transacoes = [int(valor) for valor in entrada_transacoes.split(",")]
 
-    if escolha == 1:
-        print(soma)
-
-    elif escolha == 2:
-        print(subtrair)
-
-    elif escolha == 3:
-        print(multiplicar)
-
-    elif escolha == 4:
-        print(dividir)
-
-    elif escolha == 5:
-        print("Obrigado por usar o programa!")
-        break
-
+# Processa cada transação
+for valor in transacoes:
+    if valor > 0:
+        conta.depositar(valor)
     else:
-        print("Opção inválida. Por favor, tente novamente.")
+        conta.sacar(valor)
 
-
+# Exibe o extrato final
+conta.extrato()
